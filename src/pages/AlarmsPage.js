@@ -24,6 +24,7 @@ import {
   TablePagination,
   Fab,
   Chip,
+
   Box,
   Collapse,
   Alert,
@@ -144,7 +145,8 @@ export function TransitionAlerts() {
 export default function AlarmsPage() {
 
   const navigate = useNavigate();
-  const { setNotifications,setAlarmsC,setAlarmsA,alertC,setAlertC} = useStateContext();
+  const { setNotifications,setAlarmsC,setAlarmsA,alertC,setAlertC, alarmsC,
+    alarmsA} = useStateContext();
 
   const { getData, deleteData } = useAlarms();
   const [alarms, setAlarms] = useState([]);
@@ -297,19 +299,17 @@ export default function AlarmsPage() {
     }
   }
 
-  const getDataList = async () => {
-    const res = await getData();
-      setAlarms(res);
-      setAlarmsC(res);
-  };
+  // const getDataList = async () => {
+  //   const res = await getData();
+  //     setAlarms(res);
+  //     setAlarmsC(res);
+  // };
 
 
   useEffect(() => {
-    getDataList();
-    if(alarms.length){
-      const aAlm= alarms.filter(e=>e.paused===false);
-      setActiveAlarms(aAlm);
-      setAlarmsA(aAlm);
+    if(alarmsC.length){
+      setActiveAlarms(alarmsA);
+      setAlarms(alarmsC);
     }
   }, []);
 
