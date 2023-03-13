@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 
 // @mui
@@ -10,12 +11,27 @@ import {
 
 } from '../sections/@dashboard/app';
 import { useStateContext } from '../context/ContextProvider';
+import useAlarms from '../hooks/useAlarms';
 
 // ----------------------------------------------------------------------
 
 export default function DashboardAppPage() {
   const theme = useTheme();
-  const {alarmsC,alarmsA} = useStateContext();
+  const {alarmsC,alarmsA,setAlarmsC,setAlarmsA} = useStateContext();
+  const { getData,  } = useAlarms();
+
+
+  const getDataList = async () => {
+    const res = await getData();
+     setAlarmsC(res);
+     const aAlm= res?.filter(e=>e.paused===false);
+     setAlarmsA(aAlm);
+  };
+
+
+  useEffect(() => {
+    getDataList();
+  }, []);
 
   return (
     <>

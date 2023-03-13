@@ -146,7 +146,7 @@ export default function AlarmsPage() {
   const navigate = useNavigate();
   const { setNotifications,setAlarmsC,setAlarmsA,alertC,setAlertC} = useStateContext();
 
-  const { getData, deleteData, updateData } = useAlarms();
+  const { getData, deleteData } = useAlarms();
   const [alarms, setAlarms] = useState([]);
   const [metricData, setMetricData] = useState([]);
   const [selectedAlarm, setSelectedAlarm] = useState(null);
