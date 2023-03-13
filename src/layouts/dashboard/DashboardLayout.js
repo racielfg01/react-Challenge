@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 // @mui
+import { Alert, Box, Button, Collapse, IconButton } from '@mui/material';
 import { styled } from '@mui/material/styles';
+import { useStateContext } from '../../context/ContextProvider';
 //
 import Header from './header';
 import Nav from './nav';
+import Iconify from '../../components/iconify';
 
 // ----------------------------------------------------------------------
 
@@ -32,12 +35,18 @@ const Main = styled('div')(({ theme }) => ({
 
 // ----------------------------------------------------------------------
 
+
+
+
+
 export default function DashboardLayout() {
   const [open, setOpen] = useState(false);
+
 
   return (
     <StyledRoot>
       <Header onOpenNav={() => setOpen(!open)} />
+        
 
       <Nav openNav={open} onCloseNav={() => setOpen(false)} />
 

@@ -24,6 +24,9 @@ import {
   TablePagination,
   Fab,
   Chip,
+  Box,
+  Collapse,
+  Alert,
 } from '@mui/material';
 // components
 import Label from '../components/label';
@@ -35,6 +38,7 @@ import ListToolbar from '../sections/@dashboard/alarms/ListToolbar';
 // import ALARMSLIST from '../_mock/alarms';
 import useAlarms from '../hooks/useAlarms';
 import { useStateContext } from '../context/ContextProvider';
+import Scrollbar from '../components/scrollbar/Scrollbar';
 
 // ----------------------------------------------------------------------
 
@@ -91,10 +95,56 @@ const style = {
   position: 'fixed',
 };
 
+export function TransitionAlerts() {
+  const { alertC, setAlertC} =useStateContext();
+  const [open, setOpen] = useState(false);
+  let title="";
+  if(alertC.action===0){
+    title="Alarm added successfully"
+  }else if(alertC.action===1){
+    title="Alarm update successfully"
+  }else{
+    title="Alarm delete successfully"
+  }
+  useEffect(()=>{
+    setOpen(alertC.open)
+  },[alertC])
+
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Collapse in={open}>
+      <Alert variant="filled" severity="success"
+      action={
+        <IconButton
+          aria-label="close"
+          color="inherit"
+          size="small"
+          onClick={() => {
+            setOpen(false);
+          }}
+        >
+           <Iconify icon="eva:close-fill" />
+        </IconButton>
+      }
+      sx={{ mb: 2,color:'white' }}
+      >
+
+  {title}
+</Alert>
+    
+      </Collapse>
+   
+    </Box>
+  );
+}
+
+
+
 export default function AlarmsPage() {
 
   const navigate = useNavigate();
-  const { setNotifications,setAlarmsC,setAlarmsA} = useStateContext();
+  const { setNotifications,setAlarmsC,setAlarmsA,alertC,setAlertC} = useStateContext();
 
   const { getData, deleteData, updateData } = useAlarms();
   const [alarms, setAlarms] = useState([]);
@@ -176,6 +226,7 @@ export default function AlarmsPage() {
     setOpen(false);
     const newAlarms = alarms.filter((alarm) => alarm.id !== selectedAlarm.id);
     setAlarms(newAlarms);
+   
     const res = await deleteData(selectedAlarm.id);
     console.log(res);
   };
@@ -250,19 +301,17 @@ export default function AlarmsPage() {
     const res = await getData();
       setAlarms(res);
       setAlarmsC(res);
-
   };
 
 
   useEffect(() => {
     getDataList();
     if(alarms.length){
-
       const aAlm= alarms.filter(e=>e.paused===false);
       setActiveAlarms(aAlm);
       setAlarmsA(aAlm);
     }
-  }, [alarms]);
+  }, []);
 
 
   useEffect(() => {
@@ -274,10 +323,14 @@ export default function AlarmsPage() {
       })
     }
 
-    setTimeout(() => setMetricData(fakeData), 2000);
+    setTimeout(() => setMetricData(fakeData), 1000);
     revisarAlarm();
     
   }, [metricData]);
+
+  useEffect(() => {
+      setTimeout(() => setAlertC({open:false,action:0}), 5000);
+  }, [alertC]);
   
   
 
@@ -288,11 +341,15 @@ export default function AlarmsPage() {
       </Helmet>
 
       <Container>
+
+      {alertC && <TransitionAlerts />}
         <Stack direction="row" alignItems="center" justifyContent="space-between" mb={5}>
           <Typography variant="h4" gutterBottom>
             Alarms
           </Typography>
         </Stack>
+
+    
 
         <Fab variant="contained" color="primary" sx={style} onClick={handleNew}>
           New
@@ -307,7 +364,7 @@ export default function AlarmsPage() {
         <Card>
           <ListToolbar numSelected={selected.length} 
           filterName={filterName} onFilterName={handleFilterByName} />
-
+        <Scrollbar>
           <TableContainer sx={{ minWidth: 800 }}>
             <Table>
               <ListHead
@@ -344,7 +401,7 @@ export default function AlarmsPage() {
 
                       <TableCell align="left">
                         {`${upper ? '>' : '<'} ${trigger} %`}
-                        {/* {trigger} */}
+                      
                       </TableCell>
 
                       <TableCell align="left">
@@ -391,7 +448,7 @@ export default function AlarmsPage() {
               )}
             </Table>
           </TableContainer>
-
+          </Scrollbar>
           <TablePagination
             rowsPerPageOptions={[5, 10, 25]}
             component="div"
@@ -431,7 +488,7 @@ export default function AlarmsPage() {
             </MenuItem>
           </Link>
 
-          <MenuItem sx={{ color: 'error.main' }} onClick={remove}>
+          <MenuItem sx={{ color: 'error.main' }} onClick={()=>{setAlertC({open:true,action:2}); remove()}}>
             <Iconify icon={'eva:trash-2-outline'} sx={{ mr: 2 }} />
             Delete
           </MenuItem>

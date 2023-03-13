@@ -25,6 +25,7 @@ import {
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import useAlarms from '../../../hooks/useAlarms';
+import { useStateContext } from '../../../context/ContextProvider';
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -78,6 +79,7 @@ export default function AlarmsForm() {
   const { getDataxId, createData, updateData } = useAlarms();
   const navigate = useNavigate();
   const [alarm, setAlarm] = useState({});
+  const { setAlertC} = useStateContext();
 
   const {
     setValue,
@@ -94,13 +96,14 @@ export default function AlarmsForm() {
   watch();
 
   const onSubmitHandler = async (data) => {
-    console.log(data, "add");
 
     if (id) {
       const res = await updateData(data);
+      setAlertC({open:true,action:1});
       console.log(res, "upd");
     } else {
       const res = await createData(data);
+      setAlertC({open:true,action:0});
       console.log(res, "add");
     }
     reset();
@@ -211,7 +214,7 @@ export default function AlarmsForm() {
             </Grid>
             <Grid item>
               <Button size="large" type="submit" variant="contained">
-                Update
+                {id?"Update":"Create"}
               </Button>
             </Grid>
           </Grid>

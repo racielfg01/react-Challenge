@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {  sub } from 'date-fns';
+import { sub } from 'date-fns';
 import { noCase } from 'change-case';
 import { faker } from '@faker-js/faker';
 // @mui
@@ -19,14 +19,17 @@ import {
   ListSubheader,
   ListItemAvatar,
   ListItemButton,
+  Collapse,
+  Alert,
 } from '@mui/material';
+
 // utils
 import { fToNow } from '../../../utils/formatTime';
 // components
-import Iconify from '../../../components/iconify';
+
 import Scrollbar from '../../../components/scrollbar';
 import { useStateContext } from '../../../context/ContextProvider';
-
+import Iconify from '../../../components/iconify';
 // ----------------------------------------------------------------------
 
 const NOTIFICATIONS = [
@@ -59,8 +62,9 @@ const NOTIFICATIONS = [
   },
 ];
 
+
 export default function NotificationsPopover() {
-  const {notifications,setNotifications} = useStateContext();
+  const { notifications, setNotifications, alertC, setAlertC } = useStateContext();
 
   const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
 
@@ -83,12 +87,10 @@ export default function NotificationsPopover() {
     );
   };
 
-
-
   return (
     <>
-      <IconButton color={open ? 'primary' : 'default'} 
-      onClick={handleOpen} sx={{ width: 40, height: 40 }}>
+
+      <IconButton color={open ? 'primary' : 'default'} onClick={handleOpen} sx={{ width: 40, height: 40 }}>
         <Badge badgeContent={totalUnRead} color="error">
           <Iconify icon="eva:bell-fill" />
         </Badge>
@@ -140,8 +142,6 @@ export default function NotificationsPopover() {
               <NotificationItem key={notification.id} notification={notification} />
             ))}
           </List>
-
-         
         </Scrollbar>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
@@ -157,7 +157,6 @@ export default function NotificationsPopover() {
 }
 
 // ----------------------------------------------------------------------
-
 
 function NotificationItem({ notification }) {
   const { avatar, title } = renderContent(notification);
@@ -238,7 +237,6 @@ function renderContent(notification) {
     title,
   };
 }
-
 
 NotificationItem.propTypes = {
   notification: PropTypes.shape({
