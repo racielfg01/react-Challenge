@@ -4,7 +4,7 @@
 
 > React Challenge grafena text.
 
-![preview](public/assets/preview.jpg)
+![preview](public/assets/preview.png)
 
 | [Minimal Free](https://minimal-kit-react.vercel.app/) | [Minimal](https://material-ui.com/store/items/minimal-dashboard/) |
 | ----------------------------------------------------- | :---------------------------------------------------------------- |
