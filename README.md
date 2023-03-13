@@ -1,4 +1,4 @@
-## Minimal [(Free version)](https://minimal-kit-react.vercel.app/)
+## Minimal [(Free version)](https://react-challenge-vert.vercel.app/)
 
 ![license](https://img.shields.io/badge/license-MIT-blue.svg)
 
@@ -18,9 +18,9 @@
 
 ## Page demo
 
-- [Dashboard](https://minimal-kit-react.vercel.app/dashboard/app)
-- [Alarms](https://minimal-kit-react.vercel.app/dashboard/alarms)
-- [Not Found](https://minimal-kit-react.vercel.app/404)
+- [Dashboard](https://react-challenge-vert.vercel.app/dashboard/app)
+- [Alarms](https://react-challenge-vert.vercel.app/alarms)
+- [Not Found](https://react-challenge-vert.vercel.app/404)
 
 ## Getting started
 
